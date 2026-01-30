@@ -6,35 +6,33 @@ import userRouter from "./routes/userRoute.js";
 import 'dotenv/config'
 import cartRouter from "./routes/cartRoute.js";
 import orderRouter from "./routes/orderRoute.js";
+import path from "path"; // 1. Path module ko import kiya
 
 // app config
 const app = express();
 const port = process.env.PORT || 4000;
 
-// 1. Database Connection
+// Database Connection
 connectDB();
 
-// 2. Middleware (Humesha Routes se upar rakhein)
+// Middleware
 app.use(express.json());
-app.use(cors());
+app.use(cors()); 
 
-// 3. Static Files (Yahan bhi ek slash '/' miss hai)
-app.use("/images", express.static('uploads')) 
+// 2. Static Files (Path.resolve use kiya taaki Render ko folder sahi se mile)
+app.use("/images", express.static(path.join(path.resolve(), 'uploads'))) 
 
-// 4. API Endpoints
+// API Endpoints
 app.use("/api/food", foodRouter)
-app.use("/api/user",userRouter)
-app.use("/api/cart",cartRouter)
-app.use("/api/order",orderRouter)
+app.use("/api/user", userRouter)
+app.use("/api/cart", cartRouter)
+app.use("/api/order", orderRouter)
 
 app.get("/", (req, res) => {
     res.send("API is working")
 })
 
 app.listen(port, () => {
-    console.log(`Server Started on http://localhost:${port}`)
+    // Localhost console log ko dynamic rakha
+    console.log(`Server Started on Port: ${port}`)
 })
-
-
-
-
