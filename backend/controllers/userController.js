@@ -4,13 +4,19 @@ import bcrypt from "bcrypt";
 import validator from "validator";
 import nodemailer from "nodemailer";
 
+// --- BREVO CONFIGURATION START ---
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: "smtp-relay.brevo.com",
+    port: 587,
+    secure: false, // TLS ke liye false
     auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS 
-    }
+        user: process.env.EMAIL_USER, // Brevo Login ID
+        pass: process.env.EMAIL_PASS  // Brevo SMTP Key
+    },
+    connectionTimeout: 10000, // 10 seconds timeout fix
+    greetingTimeout: 10000,
 });
+// --- BREVO CONFIGURATION END ---
 
 // 1. LOGIN USER - OTP Email with Styling
 const loginUser = async (req, res) => {
@@ -33,7 +39,7 @@ const loginUser = async (req, res) => {
 
         // --- SAJAWAT WALA EMAIL START ---
         const mailOptions = {
-            from: `"Razz Express Food" <${process.env.EMAIL_USER}>`,
+            from: `"Razz Express Food" <${process.env.EMAIL_USER}>`, // Brevo registered email
             to: email,
             subject: 'Login Verification Code - Razz Express Food',
             html: `
@@ -63,8 +69,9 @@ const loginUser = async (req, res) => {
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
                 console.log("Email Error: ", error);
-                return res.json({ success: false, message: "Email sending failed" });
+                return res.json({ success: false, message: "Email sending failed. Please check Brevo credentials on Render." });
             } else {
+                console.log("Email sent: " + info.response);
                 res.json({ success: true, message: "OTP sent to your email" });
             }
         });
@@ -75,7 +82,7 @@ const loginUser = async (req, res) => {
     }
 }
 
-// 2. REGISTER USER
+// 2. REGISTER USER (Same as before)
 const registerUser = async (req, res) => {
     const { name, password, email } = req.body;
     try {
@@ -99,7 +106,7 @@ const registerUser = async (req, res) => {
     }
 }
 
-// 3. VERIFY OTP
+// 3. VERIFY OTP (Same as before)
 const verifyOTP = async (req, res) => {
     const { email, otp } = req.body;
     try {
@@ -121,5 +128,3 @@ const verifyOTP = async (req, res) => {
 }
 
 export { loginUser, registerUser, verifyOTP }
-
-

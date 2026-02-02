@@ -7,16 +7,13 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 // Nodemailer Transporter Setup
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: "smtp-relay.brevo.com",
+    port: 587,
+    secure: false, // TLS ke liye false hi rahega
     auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS 
-    },
-    // Ye niche wali lines timeout fix karne ke liye hain
-    connectionTimeout: 10000, // 10 seconds
-    greetingTimeout: 10000,
-    socketTimeout: 10000,
-    pool: true // Multiple emails ke liye connection open rakhta hai
+        pass: process.env.EMAIL_PASS
+    }
 });
 
 // placing user order for frontend
