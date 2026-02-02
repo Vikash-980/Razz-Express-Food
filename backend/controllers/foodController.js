@@ -4,32 +4,33 @@ import fs from 'fs'
 // add food item
 const addFood = async (req, res) => {
     
-    // Sabse pehle file check karte hain
+    // Cloudinary upload ke baad file details req.file mein aati hain
     if (!req.file) {
         return res.json({ success: false, message: "Image upload failed" });
     }
 
-    // Galti yahan thi: req.image_filename nahi, req.file.filename hoga
-    let image_filename = `${req.file.filename}`;
+    // AB HUM PATH (URL) SAVE KARENGE:
+    // req.file.path mein Cloudinary ka live link hota hai
+    let image_url = req.file.path; 
 
     const food = new foodModel({
         name: req.body.name,
         description: req.body.description,
         price: req.body.price,
         category: req.body.category,
-        image: image_filename
+        image: image_url // Pura URL database mein jayega
     })
 
     try {
         await food.save();
-        res.json({ success: true, message: "Food Added" })
+        res.json({ success: true, message: "Food Added with Cloudinary URL" })
     } catch (error) {
         console.log(error)
         res.json({ success: false, message: "Error" })
     }
 }
 
-// all food list
+// all food list (Isme koi change nahi chahiye)
 const listFood = async (req, res) => {
     try {
         const foods = await foodModel.find({});
@@ -44,11 +45,13 @@ const listFood = async (req, res) => {
 const removeFood = async (req, res) => {
     try {
         const food = await foodModel.findById(req.body.id);
-        // Image ko uploads folder se delete karne ke liye
-        fs.unlink(`uploads/${food.image}`, () => { })
+        
+        // Ab hum fs.unlink use nahi karenge kyunki image local folder mein nahi hai
+        // Note: Agar Cloudinary se bhi delete karna hai toh cloudinary.uploader.destroy lagta hai
+        // Lekin abhi ke liye DB se hatana kaafi hai
         
         await foodModel.findByIdAndDelete(req.body.id);
-        res.json({ success: true, message: "Food Removed" })
+        res.json({ success: true, message: "Food Removed from Database" })
     } catch (error) {
         console.log(error);
         res.json({ success: false, message: "Error" })
@@ -57,53 +60,3 @@ const removeFood = async (req, res) => {
 
 export { addFood, listFood, removeFood }
 
-
-// import foodModel from "../models/foodModel.js";
-// import fs from 'fs'
-
-
-// // add food item
-
-// const addFood = async(req,res) => {
-//     let image_filename = `${req.image_filename}`;
-//     const food = new foodModel({
-//         name:req.body.name,
-//         description:req.body.description,
-//         price:req.body.price,
-//         category:req.body.category,
-//         image:image_filename
-//     })
-//     try {
-//         await food.save();
-//         res.json({success:true,message:"Food Added"})
-//     } catch (error) {
-//         console.log(error)
-//         res.json({success:false,message:"Error"})
-//     }
-// }
-
-// // all food list
-// const listFood = async (req,res) => {
-//     try {
-//         const foods = await foodModel.find({});
-//         res.json({success:true,data:foods})
-//     } catch (error) {
-//         console.log(error);
-//         res.json({success:false,message:"Error"})
-//     }
-// }
-
-// // remove food item
-// const removeFood = async (req,res) => {
-//     try {
-//         const food = await foodModel.findById(req.body.id);
-//         fs.unlink(`uploads/${food.image}`,()=>{})
-//         await foodModel.findByIdAndDelete(req.body.id);
-//         res.json({success:true,message:"Food Removed"})
-//     } catch (error) {
-//          console.log(error);
-//          res.json({success:false,message:"Error"})
-//     }
-// }
-
-// export {addFood,listFood,removeFood}

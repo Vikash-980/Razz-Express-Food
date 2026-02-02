@@ -1,9 +1,9 @@
+import 'dotenv/config'
 import express from "express"
 import cors from "cors"
 import { connectDB } from "./config/db.js";
 import foodRouter from "./routes/foodRoute.js";
 import userRouter from "./routes/userRoute.js";
-import 'dotenv/config'
 import cartRouter from "./routes/cartRoute.js";
 import orderRouter from "./routes/orderRoute.js";
 import path from "path"; // 1. Path module ko import kiya
@@ -20,7 +20,8 @@ app.use(express.json());
 app.use(cors()); 
 
 // 2. Static Files (Path.resolve use kiya taaki Render ko folder sahi se mile)
-app.use("/images", express.static(path.join(path.resolve(), 'uploads'))) 
+// app.use("/images", express.static(path.join(path.resolve(), 'uploads'))) 
+app.use("/images", express.static('uploads'));
 
 // API Endpoints
 app.use("/api/food", foodRouter)

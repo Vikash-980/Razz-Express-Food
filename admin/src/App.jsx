@@ -10,7 +10,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
 
-  const url = "https://razz-express-food-backend.onrender.com"
+   const url = "https://razz-express-food-backend.onrender.com"
+   // const url = 'http://localhost:4000'
 
   return (
     <div>

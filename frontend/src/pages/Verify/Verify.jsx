@@ -13,14 +13,22 @@ const Verify = () => {
     const navigate = useNavigate();
 
     const verifyPayment = async () => {
-        const response = await axios.post(url+"/api/order/verify",{success,orderId});
-        if(response.data.success){
+    try {
+        console.log("Request bhej rahe hain is URL par:", url + "/api/order/verify");
+        const response = await axios.post(url + "/api/order/verify", { success, orderId });
+        console.log("Backend se response aaya:", response.data);
+        
+        if (response.data.success) {
             navigate("/myorders");
+        } else {
+            navigate("/");
         }
-        else{
-            navigate("/")
-        }
+    } catch (error) {
+        console.error("CRITICAL ERROR IN FRONTEND:", error);
+        // navigate("/"); // Filhal ise comment kar do taaki error dikhe
     }
+}
+
 
     useEffect(()=>{
         verifyPayment();

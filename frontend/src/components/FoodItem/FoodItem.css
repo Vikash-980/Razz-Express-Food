@@ -6,9 +6,11 @@
     transition: 0.3s;
     animation: fadeIn 1s;
 }
-.food-item-image{
+.food-item-image {
     width: 100%;
+    height: 200px; /* Yeh sabse zaroori hai saare cards barabar karne ke liye */
     border-radius: 15px 15px 0px 0px;
+    object-fit: cover; /* Ab yeh image ko bina stretch kiye fit kar dega */
 }
 .food-item-info{
     padding: 20px;
