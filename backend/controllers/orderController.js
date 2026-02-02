@@ -7,13 +7,16 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 // Nodemailer Transporter Setup
 const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true, // true for 465, false for other ports
+    service: 'gmail',
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS 
-    }
+    },
+    // Ye niche wali lines timeout fix karne ke liye hain
+    connectionTimeout: 10000, // 10 seconds
+    greetingTimeout: 10000,
+    socketTimeout: 10000,
+    pool: true // Multiple emails ke liye connection open rakhta hai
 });
 
 // placing user order for frontend
