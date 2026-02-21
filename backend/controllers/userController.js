@@ -3,31 +3,50 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import validator from "validator";
 
-// Token generator
 const createToken = (id) => {
-return jwt.sign({ id }, process.env.JWT_SECRET);
+    return jwt.sign({ id }, process.env.JWT_SECRET);
 }
 
-// 1. LOGIN USER (Direct Login, No OTP)
 const loginUser = async (req, res) => {
-const { email, password } = req.body;
-try {
-const user = await userModel.findOne({ email });
-
+    const { email, password } = req.body;
+    try {
+        const user = await userModel.findOne({ email });
+        if (!user) {
+            return res.json({ success: false, message: "User Doesn't exist" });
+        }
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.json({ success: false, message: "Invalid credentials" });
+        }
+        const token = createToken(user._id);
+        res.json({ success: true, token, message: "Login Successful" });
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: "Error in Login" });
+    }
 }
 
-// 2. REGISTER USER (Direct Signup)
 const registerUser = async (req, res) => {
-const { name, password, email } = req.body;
-try {
-const exists = await userModel.findOne({ email });
-if (exists) return res.json({ success: false, message: "User already exists" });
-
+    const { name, password, email } = req.body;
+    try {
+        const exists = await userModel.findOne({ email });
+        if (exists) return res.json({ success: false, message: "User already exists" });
+        if (!validator.isEmail(email)) return res.json({ success: false, message: "Valid email required" });
+        if (password.length < 8) return res.json({ success: false, message: "Strong password required" });
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+        const newUser = new userModel({ name, email, password: hashedPassword });
+        const user = await newUser.save();
+        const token = createToken(user._id);
+        res.json({ success: true, token, message: "Account Created" });
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: "Registration Error" });
+    }
 }
 
-// 3. VERIFY OTP (Not needed anymore)
 const verifyOTP = async (req, res) => {
-res.json({ success: false, message: "OTP disabled" });
+    res.json({ success: false, message: "OTP not required" });
 }
 
 export { loginUser, registerUser, verifyOTP };
