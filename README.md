@@ -1,5 +1,6 @@
 # 🍕 Razz Express - Full Stack Food Delivery Platform
 Modern food delivery platform with **Customer App** + **Admin Panel**. Built with MERN stack and deployed on Render.
+This is a professional Full-Stack Food Delivery Application designed to provide a smooth online ordering experience for users. The frontend is developed using React.js, making the interface highly responsive and user-friendly across all devices. It is securely hosted on the Render cloud platform, allowing global access through a live public link. The application uses a Node.js and Express backend to handle complex operations like user authentication and order processing. MongoDB Atlas is integrated as the primary database to store and manage food menus, user profiles, and transaction history. The project demonstrates the complete MERN stack workflow, from building interactive components to deploying a live production environment.
 
 <table align="center">
   <tr>
@@ -21,7 +22,6 @@ Modern food delivery platform with **Customer App** + **Admin Panel**. Built wit
 |-----------|-----------|
 | 🍽 **Customer App** | [https://razz-express-food-frontend.onrender.com](https://razz-express-food-frontend.onrender.com) |
 | 👨‍💼 **Admin Panel** | [https://razz-express-food-admin.onrender.com](https://razz-express-food-admin.onrender.com) |
-| ⚙ **Backend API** | [Backend URL] |
 
 
 ## 🏗 File Structure
