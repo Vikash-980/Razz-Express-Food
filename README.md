@@ -23,7 +23,35 @@ Modern food delivery platform with **Customer App** + **Admin Panel**. Built wit
 | 👨‍💼 **Admin Panel** | [https://razz-express-food-admin.onrender.com](https://razz-express-food-admin.onrender.com) |
 | ⚙ **Backend API** | [Backend URL] |
 
+
+## 🏗 File Structure
+
+```
+razz-express/
+├── frontend/          # Customer App
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   └── utils/
+│   └── public/
+│
+├── admin/             # Admin Panel
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   └── utils/
+│   └── public/
+│
+└── backend/           # API Server
+    ├── models/
+    ├── routes/
+    ├── middleware/
+    ├── controllers/
+    └── server.js
+```
+
 ## ✨ Features
+
 
 ### **Customer App**
 ✅ Browse restaurants & menu  
